@@ -180,9 +180,21 @@ export default function App() {
       <span className="corner corner-br" />
 
       <header className="app-header">
-        <p className="kicker">Islamic Republic of Pakistan</p>
-        <h1>PAKISTAN</h1>
-        <p className="subtitle">巴基斯坦行政区划 · ADMINISTRATIVE DIVISIONS</p>
+        <div className="header-row">
+          <span className="glass-wing wing-left" aria-hidden="true">
+            <i className="pane pane-a" />
+            <i className="pane pane-b" />
+          </span>
+          <div className="header-core">
+            <p className="kicker">Islamic Republic of Pakistan</p>
+            <h1>PAKISTAN</h1>
+            <p className="subtitle">巴基斯坦行政区划 · ADMINISTRATIVE DIVISIONS</p>
+          </div>
+          <span className="glass-wing wing-right" aria-hidden="true">
+            <i className="pane pane-a" />
+            <i className="pane pane-b" />
+          </span>
+        </div>
       </header>
 
       <div className="stats">
