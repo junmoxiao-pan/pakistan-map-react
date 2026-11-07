@@ -1,5 +1,6 @@
-// 巴基斯坦 ADM1 行政区划展示配置
+// 巴基斯坦 ADM1 行政区划展示配置（边界按巴基斯坦官方主张绘制，Natural Earth PAK POV）
 // color: 区域轮廓 / 图例色；dot: 点阵填充色（略亮于区域色，保证点在深绿底上可辨）
+// kind: province = 巴方实际管辖省区；claimed = 巴方主张、非巴方实控的争议区
 // 仅作视觉区分，不代表任何业务数值
 export const PROVINCES = [
   { name: 'Punjab',                      cn: '旁遮普',             iso: 'PK-PB', color: '#2ec483', dot: '#46ef9f' },
@@ -9,7 +10,18 @@ export const PROVINCES = [
   { name: 'Gilgit-Baltistan',            cn: '吉尔吉特-巴尔蒂斯坦', iso: 'PK-GB', color: '#3fdd9a', dot: '#63ffb4' },
   { name: 'Azad Kashmir',                cn: '自由克什米尔',       iso: 'PK-JK', color: '#59e6a6', dot: '#86ffc8' },
   { name: 'Islamabad Capital Territory', cn: '伊斯兰堡首都区',     iso: 'PK-IS', color: '#7dffb7', dot: '#c2ffe0' },
+  // 巴方主张、非巴方实际管辖：整个查谟-克什米尔与拉达克，用琥珀色与巴控区区分，边框走虚线
+  {
+    name: 'Jammu & Kashmir (Disputed)',
+    cn: '查谟-克什米尔（巴方主张）',
+    iso: 'PK-JK*',
+    color: '#d9a03c',
+    dot: '#ffcb6b',
+    kind: 'claimed',
+  },
 ];
+
+export const CLAIMED_NAME = 'Jammu & Kashmir (Disputed)';
 
 export const PROVINCE_MAP = PROVINCES.reduce((acc, item) => {
   acc[item.name] = item;

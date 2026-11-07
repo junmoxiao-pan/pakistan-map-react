@@ -2,7 +2,8 @@ import { useEffect, useMemo } from 'react';
 import * as echarts from 'echarts';
 import geoJson from '../data/pakistan.geo.json';
 import dotData from '../data/pakistan.dots.json';
-import { MAP_NAME, PROVINCES, PROVINCE_MAP } from '../data/provinces';
+import borderData from '../data/borders.json';
+import { CLAIMED_NAME, MAP_NAME, PROVINCES, PROVINCE_MAP } from '../data/provinces';
 import { useEchart } from '../hooks/useEchart';
 
 // 只在模块加载时注册一次地图
@@ -23,6 +24,29 @@ const baseTextStyle = {
 };
 
 const CITY_SERIES = 'CITIES';
+
+// 巴方主张国界线：叠加一层虚线，避免被密集点阵盖住（争议区轮廓 = 巴方声索界线）
+const buildClaimBorder = () => ({
+  type: 'lines',
+  coordinateSystem: 'geo',
+  polyline: true,
+  silent: true,
+  z: 14,
+  data: borderData.claimBorder.map((coords) => ({ coords })),
+  lineStyle: {
+    color: '#ffd98a',
+    width: 2,
+    type: 'dashed',
+    opacity: 0.95,
+    shadowColor: 'rgba(255, 200, 90, 0.7)',
+    shadowBlur: 10,
+  },
+});
+
+// 争议区名字太长，地图内用短标签，并明确标注「主张」
+const GEO_LABELS = {
+  [CLAIMED_NAME]: 'JAMMU &\nKASHMIR\n(CLAIMED)',
+};
 
 // 城市标点：只显示序号，名称与说明交给图片卡片
 const buildCitySeries = (cities, activeSlug) => ({
@@ -88,10 +112,13 @@ const buildOption = (cities, activeSlug, mapSize) => ({
       const name = params.name || params.seriesName;
       const meta = PROVINCE_MAP[name];
       if (!meta) return name || '';
+      const claimed = meta.kind === 'claimed';
       return [
         `<div style="font-weight:700;font-size:14px;letter-spacing:.06em">${meta.name}</div>`,
-        `<div style="margin-top:4px;font-size:12px;color:#8fe0b8">${meta.cn} · ${meta.iso}</div>`,
-        `<div style="margin-top:2px;font-size:11px;color:#5f9d82">点位 ${dotsByProvince[PROVINCES.indexOf(meta)].length}</div>`,
+        `<div style="margin-top:4px;font-size:12px;color:${claimed ? '#ffcf82' : '#8fe0b8'}">${meta.cn} · ${meta.iso}</div>`,
+        claimed
+          ? '<div style="margin-top:2px;font-size:11px;color:#c9a263">巴方主张边界 · 非巴方实际管辖</div>'
+          : `<div style="margin-top:2px;font-size:11px;color:#5f9d82">点位 ${dotsByProvince[PROVINCES.indexOf(meta)].length}</div>`,
       ].join('');
     },
   },
@@ -102,6 +129,30 @@ const buildOption = (cities, activeSlug, mapSize) => ({
     layoutCenter: ['50%', '53%'],
     layoutSize: mapSize || '100%',
     silent: false,
+    // 巴方主张、非实控的克什米尔：虚线描边 + 琥珀色，与巴控省份明确区分
+    regions: [
+      {
+        name: CLAIMED_NAME,
+        itemStyle: {
+          areaColor: 'rgba(217, 160, 60, 0.12)',
+          borderColor: 'rgba(255, 205, 110, 0.9)',
+          borderWidth: 1.5,
+          borderType: 'dashed',
+          shadowColor: 'rgba(255, 190, 80, 0.45)',
+          shadowBlur: 16,
+        },
+        label: { color: '#ffe0a3', fontSize: 9 },
+        emphasis: {
+          itemStyle: {
+            areaColor: 'rgba(255, 198, 92, 0.22)',
+            borderColor: '#ffe6b0',
+            borderWidth: 2,
+            borderType: 'dashed',
+          },
+          label: { color: '#fff6dd' },
+        },
+      },
+    ],
     itemStyle: {
       // 区域本身不填充，仅留描边，视觉主体交给点阵
       areaColor: 'rgba(10, 74, 48, 0.18)',
@@ -118,7 +169,7 @@ const buildOption = (cities, activeSlug, mapSize) => ({
       lineHeight: 13,
       textBorderColor: 'rgba(2, 18, 11, 0.9)',
       textBorderWidth: 2.5,
-      formatter: (p) => p.name.replace(' ', '\n').replace('-', '-\n'),
+      formatter: (p) => GEO_LABELS[p.name] || p.name.replace(' ', '\n').replace('-', '-\n'),
     },
     emphasis: {
       label: { color: '#04241a', fontWeight: 800 },
@@ -157,6 +208,7 @@ const buildOption = (cities, activeSlug, mapSize) => ({
         },
       },
     })),
+    buildClaimBorder(),
     buildCitySeries(cities, activeSlug),
   ],
 });

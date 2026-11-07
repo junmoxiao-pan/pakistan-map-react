@@ -6,12 +6,27 @@ import { pickRandomCities } from './data/cities';
 
 const CITY_COUNT = 4;
 
+// 模拟遥测数据流：每隔一段时间刷新一组「实时」数值，营造 HUD 终端感
+const randTelemetry = () => ({
+  lat: (30 + Math.random() * 0.8).toFixed(4),
+  lon: (69 + Math.random() * 0.6).toFixed(4),
+  alt: 280 + Math.floor(Math.random() * 2100),
+  nodes: 24 + Math.floor(Math.random() * 44),
+  sig: 3 + Math.floor(Math.random() * 3),
+});
+
 export default function App() {
   // 首次渲染即随机抽 4 城，点击「换一批」重新抽取
   const [cities, setCities] = useState(() => pickRandomCities(CITY_COUNT));
   const [activeSlug, setActiveSlug] = useState(null);
   const [links, setLinks] = useState([]);
   const [mapSize, setMapSize] = useState(null);
+  const [telemetry, setTelemetry] = useState(randTelemetry);
+
+  useEffect(() => {
+    const timer = setInterval(() => setTelemetry(randTelemetry()), 1400);
+    return () => clearInterval(timer);
+  }, []);
 
   const appRef = useRef(null);
   const colRef = useRef(null);
@@ -186,9 +201,47 @@ export default function App() {
             <i className="pane pane-b" />
           </span>
           <div className="header-core">
-            <p className="kicker">Islamic Republic of Pakistan</p>
-            <h1>PAKISTAN</h1>
-            <p className="subtitle">巴基斯坦行政区划 · ADMINISTRATIVE DIVISIONS</p>
+            <p className="kicker">
+              <span className="kicker-tag">SYS</span>
+              GEO-INTELLIGENCE TERMINAL
+              <span className="kicker-coord">[30.3753° N · 69.3451° E]</span>
+            </p>
+            <h1>
+              <span className="h1-glitch" aria-hidden="true">PAKISTAN</span>
+              <span className="h1-main">PAKISTAN</span>
+              <span className="h1-scan" aria-hidden="true" />
+            </h1>
+            <p className="subtitle">
+              地理智能可视化
+              <span className="subtitle-divider">·</span>
+              REGIONAL ANALYSIS ENGINE
+            </p>
+            <div className="telemetry" aria-hidden="true">
+              <span className="led led-on" />
+              <span className="led led-on" />
+              <span className="led led-off" />
+              <span className="tel-item">
+                LAT <b>{telemetry.lat}</b>°
+              </span>
+              <span className="tel-divider">·</span>
+              <span className="tel-item">
+                LON <b>{telemetry.lon}</b>°
+              </span>
+              <span className="tel-divider">·</span>
+              <span className="tel-item">
+                ALT <b>{telemetry.alt}</b>m
+              </span>
+              <span className="tel-divider">·</span>
+              <span className="tel-item">
+                NODES <b>{telemetry.nodes}</b>
+              </span>
+              <span className="signal">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <i key={i} className={i < telemetry.sig ? 'on' : ''} />
+                ))}
+              </span>
+              <span className="tel-cursor">▍</span>
+            </div>
           </div>
           <span className="glass-wing wing-right" aria-hidden="true">
             <i className="pane pane-a" />
@@ -198,7 +251,8 @@ export default function App() {
       </header>
 
       <div className="stats">
-        <b>{PROVINCES.length}</b>
+        {/* 只统计实控省区，主张中的克什米尔不计入 */}
+        <b>{PROVINCES.filter((p) => p.kind !== 'claimed').length}</b>
         <span>PROVINCES / TERRITORIES</span>
       </div>
 
@@ -244,7 +298,9 @@ export default function App() {
         换一批城市
       </button>
 
-      <p className="hint">滚轮缩放 · 拖拽平移 · 点击标点或图片高亮对应城市</p>
+      <p className="hint">
+        滚轮缩放 · 拖拽平移 · 点击标点或图片高亮对应城市 · 琥珀虚线为巴方主张国界（克什米尔全境视为其领土，非国际公认边界）
+      </p>
     </div>
   );
 }

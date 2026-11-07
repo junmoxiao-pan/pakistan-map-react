@@ -1,3 +1,14 @@
+---
+AIGC:
+    Label: "1"
+    ContentProducer: 001191440300708461136T1XGW3
+    ProduceID: 88d0be916e1cf32d98366f81357b399a_9fa42819ce2c11f193fe525400638852
+    ReservedCode1: 5pvRYk5wwE/gf47OzZ6yc+EsulEYS3Nq8PKKPOAdi8J70qJixQvI3ZA4wKr1EI3nAucAIJFjPaXt7J7NeIaWaRp+cJjpXOumEIVpISdMic8kHW1FxPwt0ZZaoUiv9PY4a2qzM1tj+fiNEXRJKpMauPcDDvGkVz72QHo6lyQ5XeP/N5p0oKqolq3JkFQ=
+    ContentPropagator: 001191440300708461136T1XGW3
+    PropagateID: 88d0be916e1cf32d98366f81357b399a_9fa42819ce2c11f193fe525400638852
+    ReservedCode2: 5pvRYk5wwE/gf47OzZ6yc+EsulEYS3Nq8PKKPOAdi8J70qJixQvI3ZA4wKr1EI3nAucAIJFjPaXt7J7NeIaWaRp+cJjpXOumEIVpISdMic8kHW1FxPwt0ZZaoUiv9PY4a2qzM1tj+fiNEXRJKpMauPcDDvGkVz72QHo6lyQ5XeP/N5p0oKqolq3JkFQ=
+---
+
 # 巴基斯坦点阵地图 · React + ECharts
 
 基于 Vite + React 18 + ECharts 5 的巴基斯坦行政区划可视化，深绿主题，地图由 8,545 个圆点构成；
@@ -67,3 +78,4 @@ pakistan-map-react/
 ## License
 
 MIT
+*（内容由AI生成，仅供参考）*
