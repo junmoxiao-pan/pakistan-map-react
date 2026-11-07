@@ -10,10 +10,11 @@ export const PROVINCES = [
   { name: 'Gilgit-Baltistan',            cn: '吉尔吉特-巴尔蒂斯坦', iso: 'PK-GB', color: '#3fdd9a', dot: '#63ffb4' },
   { name: 'Azad Kashmir',                cn: '自由克什米尔',       iso: 'PK-JK', color: '#59e6a6', dot: '#86ffc8' },
   { name: 'Islamabad Capital Territory', cn: '伊斯兰堡首都区',     iso: 'PK-IS', color: '#7dffb7', dot: '#c2ffe0' },
-  // 巴方主张、非巴方实际管辖：整个查谟-克什米尔与拉达克，用琥珀色与巴控区区分，边框走虚线
+  // 巴方主张、非巴方实际管辖：整个前查谟-克什米尔土邦（印控克什米尔 + 拉达克 + 阿克赛钦 + 喀喇昆仑走廊）
+  // 用琥珀色与巴控区区分，边框走虚线
   {
     name: 'Jammu & Kashmir (Disputed)',
-    cn: '查谟-克什米尔（巴方主张）',
+    cn: '克什米尔全境（巴方主张）',
     iso: 'PK-JK*',
     color: '#d9a03c',
     dot: '#ffcb6b',

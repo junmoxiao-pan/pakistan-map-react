@@ -45,7 +45,7 @@ const buildClaimBorder = () => ({
 
 // 争议区名字太长，地图内用短标签，并明确标注「主张」
 const GEO_LABELS = {
-  [CLAIMED_NAME]: 'JAMMU &\nKASHMIR\n(CLAIMED)',
+  [CLAIMED_NAME]: 'KASHMIR\n(CLAIMED)',
 };
 
 // 城市标点：只显示序号，名称与说明交给图片卡片
